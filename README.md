@@ -3,7 +3,7 @@
 
 The purpose of this app is to provide an XXX
 
-This application was developed on February 5th, 2015 for the [Evergreen Awesome Hackthon](http://example.com/this-goes-nowhere).
+This application was developed on February 5th, 2015 for the Hack Housing: Empowering Smarter Decisions – A Weekend Hackathon.
 
 ![Isn't our app beautiful?!](screenshot.jpg)
 
@@ -25,10 +25,11 @@ Once we did that, we knew we were guaranteed to win!
 
 Our team is comprised of:
 
-- [@chrismetcalf](http://github.com/chrismetcalf) - README.md author and all around awesome guy
-- [@torvalds](http://github.com/torvalds) - Wrangler of penguins
-- [@matz](http://github.com/matz) - Miner of Rubies
-- [@gvanrossum](http://github.com/gvanrossum) - Python charmer
+Eric Kang
+Bernard Chester
+Mengqian Liu
+Jiaming Liu
+Aaron Rose
 
 ## Technologies, APIs, and Datasets Utilized
 
