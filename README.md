@@ -1,17 +1,15 @@
 # Zillow Hackathon: Ustimate
 
 
-The purpose of this app is to provide an XXX
+The purpose of this app is to provide an app for people to search for homes according to personalized estimate.
 
-This application was developed on February 5th, 2015 for the Hack Housing: Empowering Smarter Decisions – A Weekend Hackathon.
+This app is developed on Feb 7th for Zillow Hackathon.
 
 ![Isn't our app beautiful?!](screenshot.jpg)
 
-Our app is live at http://example.com/awesome-app-that-doesnt-exist. You can log in as the demo user "unicorns" with password "sartfarkles". You can also check out [this demo screencast](https://www.youtube.com/watch?v=dQw4w9WgXcQ) of our application on YouTube.
-
 ## Challenge and Approach
 
-Our submission is for [Challenge #3: Build an app that provides an example of an Awesome Hackathon submission](http://example.com/this-also-goes-nowhere).
+Our submission is for Zillow Hackathon.
 
 Our approach for satisfying this challenge was to:
 
@@ -34,17 +32,14 @@ Aaron Rose
 ## Technologies, APIs, and Datasets Utilized
 
 We made use of:
-
-- Hand harvested unicorn tears. Unicorns are very happy creatures, its hard to make them cry.
-- [mod_bf](http://modbf.sourceforge.net/)
-- The [Top 1,000 Songs To Hear Before You Die](https://opendata.socrata.com/Fun/Top-1-000-Songs-To-Hear-Before-You-Die/ed74-c6ni) dataset and [API](http://dev.socrata.com/foundry/#/opendata.socrata.com/ed74-c6ni)
+Android/Java/Javascript
+Socrata API to pull data from seattle.gov for crime rate and medicare.gov for healthcare data
+Zillow API to pull Zestimate, School district information, and Transit information
+Google Map API
 
 ## Contributing
 
 In order to build and run our app:
-
-1. Harvest yourself some unicorn tears. They're expensive to purchase on your own.
-2. [Deploy your the code](https://github.com/masylum/Brainfuck-on-Rails) to [Heroku](http://heroku.com)
-3. Profit
+Simply install the app.
 
 Our code is licensed under the [MIT License](LICENSE.md). Pull requests will be accepted to this repo, pending review and approval.
