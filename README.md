@@ -5,7 +5,7 @@ The purpose of this app is to provide an app for people to search for homes acco
 
 This app is developed on Feb 7th for Zillow Hackathon.
 
-![Isn't our app beautiful?!](screenshot.jpg)
+![Isn't our app beautiful?!](screenshot.png)
 
 ## Challenge and Approach
 
@@ -15,7 +15,8 @@ Our approach for satisfying this challenge was to:
 
 - Develop an example Git repository
 - Share it on Github
-- Collect feedback from the community
+- Use provided data set
+- Use Zillow API
 
 Once we did that, we knew we were guaranteed to win!
 
