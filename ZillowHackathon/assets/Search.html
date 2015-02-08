@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.labels {
+	color: red;
+	background-color: white;
+	font-family: "Lucida Grande", "Arial", sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+	width: 40px;
+	border: 2px solid black;
+	white-space: nowrap;
+}
+</style>
+<script>
+	var markersArray = [];
+	function newMarker(lat, lng, price, icon, house) {
+		console.log("lat " + lat + "--lng " + lng);
+		markersArray[markersArray.length] = new MarkerWithLabel({
+			position : new google.maps.LatLng(lat, lng),
+			map : map,
+			icon : icon,
+		    labelContent: "$" + Math.floor(price/1000) + "k",
+		    labelAnchor: new google.maps.Point(22, 0),
+	        labelClass: "labels", // the CSS class for the label
+	        labelStyle: {opacity: 0.75}
+		});
+		  google.maps.event.addListener(markersArray[markersArray.length - 1], 'click', function() {
+			    ji.onLabelClicked(this.Price, this.zestimate, this.safety, this.transportation, this.school, this.healthcare);
+			  }.bind(house));
+		console.log("lat " + lat + "--lng " + lng);
+	}
+
+	function clearMarkers() {
+		for ( var i = 0; i < markersArray.length; i++) {
+			markersArray[i].setMap(null);
+		}
+		markersArray.length = 0;
+	}
+
+	function search() {
+		navigator.geolocation.getCurrentPosition(function(position) {/*
+					getAvailableNearLocation({
+						location : {
+							latitude : position.coords.latitude,
+							longitude : position.coords.longitude
+						}
+					}, function(nearbyDevices) {
+						searchResult = nearbyDevices;
+						loadSearchResult();
+					});*/
+		});
+	}
+</script>
+
+
+
+<title>Simple Map</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<style>
+html,body,#map-canvas {
+	height: 100%;
+	margin: 0px;
+	padding: 0px
+}
+</style>
+
+</head>
+<script
+	src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=geometry"></script>
+
+<script type="text/javascript" src="markerwithlabel_packed.js"></script>
+<script type="text/javascript" src="model.js"></script>
+<body>
+	<script>
+		var zwsid = "X1-ZWz1e1igggcxl7_8qndf";
+		var map;
+		function initialize() {
+			var mapOptions = {
+				zoom : 10,
+				center : new google.maps.LatLng(47.6097, -122.3331)
+			};
+			map = new google.maps.Map(document.getElementById('map-canvas'),
+					mapOptions);
+			ji.onPageReady();
+		}
+
+		google.maps.event.addDomListener(window, 'load', initialize);
+
+		function loadHouse(house) {
+			var address = house.Address;
+			var zip = house.zip;
+			var url = "http://www.zillow.com/webservice/GetSearchResults.htm?zws-id="
+					+ zwsid + "&address=" + address + "&citystatezip=" + zip;
+			//console.log("url: " + url);
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', url, false);
+			xhr.send(null);
+			//console.log(xhr.responseText);
+			var xmlDoc = xhr.responseXML;
+			var zpid = xmlDoc.getElementsByTagName("zpid")[0].childNodes[0].nodeValue;
+			var zestimate = xmlDoc.getElementsByTagName("amount")[0].childNodes[0].nodeValue;
+			var latitude = xmlDoc.getElementsByTagName("latitude")[0].childNodes[0].nodeValue;
+			var longitude = xmlDoc.getElementsByTagName("longitude")[0].childNodes[0].nodeValue;
+			zestimate = Number(zestimate);
+			latitude = Number(latitude);
+			longitude = Number(longitude);
+			house.zpid = zpid;
+			house.zestimate = zestimate;
+			house.latitude = latitude;
+			house.longitude = longitude;
+			//console.log("ZPID: " + zpid + "--Zestimate: " + zestimate);
+			//newMarker(latitude, longitude, house.Price, getIcon(house.Price, zestimate));
+			
+			getSafetyRate(house);
+			getHealthcareRate(house);
+			getSchoolRate(house);
+			getTransporationRate(house);
+			
+			// For demo purpose, reduce network and do not pull from Zillow details
+			//var detailUrl = "http://www.zillow.com/webservice/GetUpdatedPropertyDetails.htm?zws-id="+zwsid+"&zpid=" +zpid;
+			//var xhr2 = new XMLHttpRequest();
+			//xhr2.open('GET', detailUrl, false);
+			//xhr2.send();
+			//console.log(xhr2.responseText);
+			//var xmlDoc2 = xhr2.responseXML;
+		}
+		
+		function getIcon(price, yourValue) {
+			var color, v1, v2;
+			if(price >= yourValue) {
+				v1 = yourValue;
+				v2 = price - v1;
+				color = "FF0000";
+			} else {
+				v1 = price;
+				v2 = yourValue - v1;
+				color = "00FF00";
+			}
+			
+			// For better image
+			v1 = v1/2;
+			
+			//var url = "https://chart.googleapis.com/chart?cht=bhs&chco=777777,"+ color +"&chf=bg,s,FFFFFFFF&chs=40x25&chds=0,100&chd=t:"+Math.floor(v1/10000)+"|"+Math.floor(v2/10000);
+			//var url = "https://chart.googleapis.com/chart?cht=bhs&chco=777777,"+ color +"&chf=bg,s,FFFFFFFF&chs=40x25&chds=0,100&chd=t:"+Math.floor(v1/10000)+"|"+Math.floor(v2/10000);
+			var url = "https://chart.googleapis.com/chart?cht=bhg&chs=40x25&chds=0,120&chco=ff0000,00ff00&chbh=8,2,8&chd=t:"+Math.floor(price/10000)+"|"+Math.floor(yourValue/10000);;
+			console.log("icon: " + url);
+			return url;
+		}
+		
+		function loadHouses(input) {
+			console.log("Loading houses: " + input);
+			var houses = input; //JSON.parse(input);
+			for(var i in houses) {
+				var house = houses[i];
+				house.Price = parseFloat(house.Price.replace(",", ""));;
+				house.Zestimate = parseFloat(house.Zestimate.replace(",", ""));
+				loadHouse(house);
+			}
+		}
+		
+		document.addEventListener("house_ready", function(event){
+			var house = event.detail;
+			house.yourValue = ji.addHouse(house.price, house.zestimate, house.school, house.healthcare, house.transportation, house.safety);
+			console.log("on house callback: " + JSON.stringify(house));
+			newMarker(house.latitude, house.longitude, house.Price, getIcon(house.Price, house.yourValue), house);
+		});
+	</script>
+	<div id="map-canvas"></div>
+</body>
+</html>
